@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.web.WebEngine;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -25,11 +24,10 @@ import javafx.application.Application;
 
 public class Launcher extends Application
 {
-    @SuppressWarnings("unchecked")
 	public void start(final Stage primaryStage) throws Exception {
         System.out.println("Setting up variables");
-        final String gameVersion = "Game Version: 0.0.5a";
-        final String launcherVersion = "Launcher Version: 0.0.2a";
+        final String gameVersion = "0.0.5a";
+        final String launcherVersion = "0.0.2a";
         final Boolean debug = false;
         System.out.println("Creating launcher window");
         primaryStage.setTitle("Questlight Launcher");
@@ -38,7 +36,7 @@ public class Launcher extends Application
         playButton.setText("Play!");
         playButton.setStyle("-fx-font-size: 2em");
         playButton.setPrefSize(310.0, 100.0);
-        playButton.setOnAction((EventHandler)new EventHandler<ActionEvent>() {
+        playButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent event) {
                 try {
                     Runtime.getRuntime().exec("cmd /c start \"\" Questlight.bat");
@@ -59,15 +57,15 @@ public class Launcher extends Application
                 gitEngine.load("http://github.com/Questlight/Questlight-Alpha");
                 final Text URL = new Text();
                 URL.setText("Please note: GitHub does not look the best in the launcher, please go to https://github.com/Questlight/Questlight-Alpha in your favorite browser!");
-                final VBox secondaryLayout = new VBox(new Node[] { (Node)githubView, (Node)URL });
-                final Scene secondScene = new Scene((Parent)secondaryLayout, 640.0, 480.0);
+                final VBox secondaryLayout = new VBox(githubView, URL);
+                final Scene secondScene = new Scene(secondaryLayout, 640.0, 480.0);
                 final Stage git = new Stage();
                 git.setTitle("Questlight's GitHub Page");
-                URL.wrappingWidthProperty().bind((ObservableValue)git.widthProperty());
+                URL.wrappingWidthProperty().bind(git.widthProperty());
                 git.setScene(secondScene);
                 git.setX(primaryStage.getX() + 200.0);
                 git.setY(primaryStage.getY() + 100.0);
-                URL.wrappingWidthProperty().bind((ObservableValue)git.widthProperty());
+                URL.wrappingWidthProperty().bind(git.widthProperty());
                 git.setTitle("GitHub Browser");
                 git.show();
             }
@@ -79,9 +77,9 @@ public class Launcher extends Application
         exit.setOnAction(e -> Platform.exit());
         final VBox githubExit = new VBox(new Node[] { (Node)githubButton, (Node)exit });
         final Text gameVer = new Text();
-        gameVer.setText(gameVersion);
+        gameVer.setText("Game Version: " + gameVersion);
         final Text launcherVer = new Text();
-        launcherVer.setText(launcherVersion);
+        launcherVer.setText("Launcher Version: " + launcherVersion);
         final Text blank1 = new Text();
         final Text blank2 = new Text();
         final CheckBox debugMode = new CheckBox();
@@ -100,12 +98,12 @@ public class Launcher extends Application
                 
             }
         });
-        final VBox versions = new VBox(new Node[] { (Node)gameVer, (Node)blank1, (Node)launcherVer, (Node)blank2, (Node)debugMode });
-        final HBox topBar = new HBox(new Node[] { (Node)playButton, (Node)versions, (Node)githubExit });
+        final VBox versions = new VBox(gameVer, blank1, launcherVer, blank2, debugMode);
+        final HBox topBar = new HBox(playButton, versions, githubExit);
         final WebView webView = new WebView();
         final WebEngine webEngine = webView.getEngine();
         webEngine.load("http://questlightupdate.tumblr.com");
-        final VBox root = new VBox(new Node[] { (Node)topBar, (Node)webView });
+        final VBox root = new VBox(topBar, webView);
         System.out.println("Drawing window");
         final Scene scene = new Scene((Parent)root, 600.0, 400.0);
         primaryStage.setScene(scene);
