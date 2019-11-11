@@ -25,10 +25,11 @@ import javafx.application.Application;
 
 public class Launcher extends Application
 {
-    public void start(final Stage primaryStage) throws Exception {
+    @SuppressWarnings("unchecked")
+	public void start(final Stage primaryStage) throws Exception {
         System.out.println("Setting up variables");
         final String gameVersion = "Game Version: 0.0.5a";
-        final String launcherVersion = "Launcher Version: 0.0.1a";
+        final String launcherVersion = "Launcher Version: 0.0.2a";
         final Boolean debug = false;
         System.out.println("Creating launcher window");
         primaryStage.setTitle("Questlight Launcher");
@@ -51,7 +52,7 @@ public class Launcher extends Application
         githubButton.setText("GitHub");
         githubButton.setStyle("-fx-font-size: 2em");
         githubButton.setPrefSize(165.0, 50.0);
-        githubButton.setOnAction((EventHandler)new EventHandler<ActionEvent>() {
+        githubButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent event) {
                 final WebView githubView = new WebView();
                 final WebEngine gitEngine = githubView.getEngine();
@@ -85,15 +86,18 @@ public class Launcher extends Application
         final Text blank2 = new Text();
         final CheckBox debugMode = new CheckBox();
         debugMode.setText("Debug Mode");
-        debugMode.setOnAction((EventHandler)new EventHandler<ActionEvent>() {
+        debugMode.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent event) {
-                if (debugMode.isSelected()) {
-                    final Boolean debug = true;
-                    System.out.println("Debug mode enabled");
+                if (debugMode.isSelected() == true) {
+                    Boolean debug = true;
+                    System.out.println("Debug mode " + debug);
                 }
-                else {
-                    false;
+               
+                if (debugMode.isSelected() == false) {
+                    final Boolean debug = false;
+                    System.out.println("Debug mode " + debug);
                 }
+                
             }
         });
         final VBox versions = new VBox(new Node[] { (Node)gameVer, (Node)blank1, (Node)launcherVer, (Node)blank2, (Node)debugMode });
